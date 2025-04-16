@@ -20,12 +20,12 @@ def run_web():
 threading.Thread(target=run_web, daemon=True).start()
 
 # 🔹 Configuração do Bot
-API_ID = 24180775  # Substitua pelo seu ID
-API_HASH = "e648ed871497310839bdaefd039055ae"  # Substitua pela sua API Hash
-BOT_TOKEN = "8160894027:AAGNXOXjKN2Zq_ASJbOU7sSIFccgQEqRrCc"  # Substitua pelo seu Token
+API_ID = 29530163  # Substitua pelo seu ID
+API_HASH = "6066497fd46d35ea3dac9a179e27047b"  # Substitua pela sua API Hash
+BOT_TOKEN = "7871641813:AAEB-qdBjodY3a9nq-bQsOIqRJpsmKhyz4U"  # Substitua pelo seu Token
 
 # 🔹 Canal onde os sinais serão enviados
-CHANNEL_ID = "@SILVERCOPMTD"  # Substitua pelo @ do seu canal
+CHANNEL_ID = "@Avontzzp"  # Substitua pelo @ do seu canal
 
 # 🔹 Imagens associadas aos jogos
 IMAGENS_JOGOS = {
