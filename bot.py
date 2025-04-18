@@ -22,7 +22,7 @@ threading.Thread(target=run_web, daemon=True).start()
 # 🔹 Configuração do Bot
 API_ID = 29530163  # Substitua pelo seu ID
 API_HASH = "6066497fd46d35ea3dac9a179e27047b"  # Substitua pela sua API Hash
-BOT_TOKEN = "7871641813:AAEB-qdBjodY3a9nq-bQsOIqRJpsmKhyz4U"  # Substitua pelo seu Token
+BOT_TOKEN = "7871641813:AAHrd2CU5DXt-Tm90yFYB1R9TD7psyPEMms"  # Substitua pelo seu Token
 
 # 🔹 Canal onde os sinais serão enviados
 CHANNEL_ID = "@Avontzzp"  # Substitua pelo @ do seu canal
