@@ -177,20 +177,11 @@ async def enviar_sinais():
             post = await app_bot.send_message(CHANNEL_ID, mensagem)
             print(f"Sinal enviado para {jogo}")
 
-           # Se houver imagem associada ao jogo, envia com botão
-if imagem_jogo and os.path.exists(imagem_jogo):
-    botoes = InlineKeyboardMarkup(
-        [
-            [InlineKeyboardButton("🎰 JOGUE AGORA", url="https://9276jogo.site/?pid=29056940")]
-        ]
-    )
-    await app_bot.send_photo(
-        chat_id=CHANNEL_ID,
-        photo=imagem_jogo,
-        caption=mensagem,
-        reply_markup=botoes
-    )
-    print(f"Imagem do jogo {jogo} com botão enviada!")
+            # Se houver imagem associada ao jogo, envia também
+            if imagem_jogo and os.path.exists(imagem_jogo):
+                await app_bot.send_photo(CHANNEL_ID, imagem_jogo)
+                print(f"Imagem do jogo {jogo} enviada!")
+
             # Adiciona comentários com mídias
             await adicionar_comentarios(post)
 
