@@ -20,13 +20,15 @@ def run_web():
 
 threading.Thread(target=run_web, daemon=True).start()
 
-# Configuração do Bot
-API_ID = 29530163
-API_HASH = "6066497fd46d35ea3dac9a179e27047b"
-BOT_TOKEN = "7871641813:AAHrd2CU5DXt-Tm90yFYB1R9TD7psyPEMms"
-CHANNEL_ID = "@Avontzzp"
+# 🔹 Configuração do Bot
+API_ID = 29530163  # Substitua pelo seu ID
+API_HASH = "6066497fd46d35ea3dac9a179e27047b"  # Substitua pela sua API Hash
+BOT_TOKEN = "7871641813:AAHrd2CU5DXt-Tm90yFYB1R9TD7psyPEMms"  # Substitua pelo seu Token
 
-# Imagens associadas aos jogos
+# 🔹 Canal onde os sinais serão enviados
+CHANNEL_ID = "@Avontzzp"  # Substitua pelo @ do seu canal
+
+# 🔹 Imagens associadas aos jogos
 IMAGENS_JOGOS = {
     "Fortune Snake 🐍": "A:/garimpo digital/Figurinhas Slots/PG/8.jpg",
     "Fortune Mouse 🐹": "A:/garimpo digital/Figurinhas Slots/PG/mouse.png",
@@ -56,7 +58,7 @@ IMAGENS_JOGOS = {
     "Piggy Gold 🐷": "A:/garimpo digital/Figurinhas Slots/PG/piggygold.png",
 }
 
-# Jogos disponíveis
+# 🔹 Jogos disponíveis
 jogos = {
     "Fortune Snake 🐍": {"bet_min": 0.30, "bet_max": 400.0},
     "Fortune Mouse 🐹": {"bet_min": 0.50, "bet_max": 400.0},
@@ -86,8 +88,8 @@ jogos = {
     "Piggy Gold 🐷": {"bet_min": 0.40, "bet_max": 400.0},
 }
 
-# Link de afiliação
-LINK_AFILIACAO = "https://9353jogo.site/?pid=29056940"
+# 🔹 Link de afiliação
+LINK_AFILIACAO = "https://9353jogo.site/?pid=29056940"  # Substitua pelo seu link
 
 # Lista de vídeos como provas sociais
 VIDEOS_PROVAS = [
@@ -142,46 +144,93 @@ def gerar_mensagem(jogo, deposito, aposta):
     horario_formatado = horario_sinal.strftime("%H:%M")
     estrategia = "🔹 Automático 10x, Turbo ligado"
     nova_opcao = random.choice(list(jogos.keys()))
-    imagem_jogo = IMAGENS_JOGOS.get(jogo, None)
+    
+    # Definir a imagem correspondente ao jogo
+    imagem_jogo = IMAGENS_JOGOS.get(jogo, None)  # Caso não haja imagem, não envia
 
     mensagem = f"""
 📢 **Oportunidade de Lucro - Slots** 📢
 
-⏰ **Hora Certa para Apostar!** Jogue **{jogo}**
-🗓 **Horário recomendado**: {horario_formatado}
+⏰ **Hora Certa para Apostar!** Jogue **{jogo}** 
+📅 **Horário recomendado**: {horario_formatado}
 💰 **Depósito**: R${deposito}
 🎯 **Aposta sugerida**: R${aposta}
 📝 **Estratégia**: {estrategia}
 
-💡 **Dica de Profissional**: Se os 10 giros forem positivos, aumente aos poucos. Caso não lucre, tente outro jogo como {nova_opcao}.
+💡 **Dica de Profissional**: Se os 10 giros forem positivos, aumente a aposta e jogue mais 10x. Caso contrário, tente **{nova_opcao}**.
 
-🔗 Clique abaixo para jogar:
+🔥 **Comece agora e aproveite essa chance**: [Jogue aqui]({LINK_AFILIACAO})
+
+Boa sorte! 🍀
 """
+    return mensagem, imagem_jogo
 
-    botoes = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🍀 JOGUE AGORA  🎰", url=LINK_AFILIACAO)]
-    ])
-
-    return mensagem, imagem_jogo, botoes
-
-# Função para envio de sinais (exemplo)
-async def enviar_sinal():
-    jogo = random.choice(list(jogos.keys()))
-    deposito = random.choice([10, 20, 30, 50])
-    aposta = calcular_bet(deposito)
-    mensagem, imagem, botoes = gerar_mensagem(jogo, deposito, aposta)
-
-    if imagem and os.path.exists(imagem):
-        await app_bot.send_photo(CHANNEL_ID, photo=imagem, caption=mensagem, reply_markup=botoes, parse_mode="markdown")
-    else:
-        await app_bot.send_message(CHANNEL_ID, text=mensagem, reply_markup=botoes, parse_mode="markdown")
-
-# Execução contínua do bot
-async def main():
-    await app_bot.start()
+async def enviar_sinais():
     while True:
-        await enviar_sinal()
-        await asyncio.sleep(420)  # espera 7 minutos (420 segundos)
+        jogo = random.choice(list(jogos.keys()))
+        deposito = random.choice([5,10, 20, 30, 50,80,100,30,400])
+        aposta = calcular_bet(deposito)
+        mensagem, imagem_jogo = gerar_mensagem(jogo, deposito, aposta)
+        
+        try:
+            # Envia a mensagem
+            post = await app_bot.send_message(CHANNEL_ID, mensagem)
+            print(f"Sinal enviado para {jogo}")
+
+            # Se houver imagem associada ao jogo, envia também
+            if imagem_jogo and os.path.exists(imagem_jogo):
+                await app_bot.send_photo(CHANNEL_ID, imagem_jogo)
+                print(f"Imagem do jogo {jogo} enviada!")
+
+            # Adiciona comentários com mídias
+            await adicionar_comentarios(post)
+
+            await asyncio.sleep(30)
+            video_escolhido = random.choice(VIDEOS_PROVAS)
+            await app_bot.send_video(
+                CHANNEL_ID,
+                video_escolhido,
+                caption="Olha os resultados! Quer aprender? Cola com a gente! 🚀"
+            )
+            print("Prova social enviada!")
+        except Exception as e:
+            print(f"Erro ao enviar mensagem: {e}")
+        await asyncio.sleep(300)
+
+async def adicionar_comentarios(post):
+    try:
+        # Adiciona reações ao post
+        await post.react(emoji="👍")
+        await post.react(emoji="🔥")
+
+        # Adiciona comentários com mídias
+        midias_ganhos = os.listdir("midias/ganhos")
+        midias_agradecimentos = os.listdir("midias/agradecimentos")
+
+        if midias_ganhos:
+            midia_ganho = random.choice(midias_ganhos)
+            await app_bot.send_photo(
+                chat_id=CHANNEL_ID,
+                photo=f"midias/ganhos/{midia_ganho}",
+                reply_to_message_id=post.id,
+                caption="Mais um ganho incrível! 🤑"
+            )
+
+        if midias_agradecimentos:
+            midia_agradecimento = random.choice(midias_agradecimentos)
+            await app_bot.send_photo(
+                chat_id=CHANNEL_ID,
+                photo=f"midias/agradecimentos/{midia_agradecimento}",
+                reply_to_message_id=post.id,
+                caption="Obrigado pelo sinal! Vocês são demais! 🙏"
+            )
+    except Exception as e:
+        print(f"Erro ao adicionar comentários: {e}")
+
+async def main():
+    async with app_bot:
+        await enviar_sinais()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())
